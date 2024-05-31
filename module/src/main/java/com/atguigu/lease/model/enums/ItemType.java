@@ -11,8 +11,8 @@ public enum ItemType implements BaseEnum {
     ROOM(2, "房间");
 
 
-    @EnumValue
-    @JsonValue
+    @EnumValue //从ItemType对象到code属性之间的相互映射
+    @JsonValue //从ItemType对象到code属性之间的互相映射
     private Integer code;
     private String name;
 
