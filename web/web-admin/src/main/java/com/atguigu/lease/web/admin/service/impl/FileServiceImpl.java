@@ -27,39 +27,34 @@ public class FileServiceImpl implements FileService {
     private MinioProperties properties;
 
     @Override
-    public String upload(MultipartFile file) {
-        try {
-            boolean bucketExists = minioClient.bucketExists(
-                    BucketExistsArgs.builder()
+    public String upload(MultipartFile file) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        boolean bucketExists = minioClient.bucketExists(
+                BucketExistsArgs.builder()
+                        .bucket(properties.getBucketName())
+                        .build());
+        if (!bucketExists) {
+            minioClient.makeBucket(
+                    MakeBucketArgs.builder()
+                            .bucket(properties.getBucketName()).build());
+            minioClient.setBucketPolicy(
+                    SetBucketPolicyArgs.builder()
                             .bucket(properties.getBucketName())
+                            .config(createBucketPolicyConfig(properties.getBucketName()))
                             .build());
-            if (!bucketExists) {
-                minioClient.makeBucket(
-                        MakeBucketArgs.builder()
-                                .bucket(properties.getBucketName()).build());
-                minioClient.setBucketPolicy(
-                        SetBucketPolicyArgs.builder()
-                                .bucket(properties.getBucketName())
-                                .config(createBucketPolicyConfig(properties.getBucketName()))
-                                .build());
-            }
-            String filename = new SimpleDateFormat("yyyyMMdd")
-                    .format(new Date()) + "/"
-                    + UUID.randomUUID() + "-"
-                    + file.getOriginalFilename();
-
-            minioClient.putObject(PutObjectArgs.builder()
-                    .bucket(properties.getBucketName())
-                    .stream(file.getInputStream(), file.getSize(), -1)
-                    .object(filename)
-                    .contentType(file.getContentType())
-                    .build());
-//            String url = properties.getEndpoint() + "/" + properties.getBucketName() + "/" + filename;
-            return String.join("/", properties.getEndpoint(), properties.getBucketName(), filename);
-        } catch (Exception e) {
-            log.error("bucketExists:{}", e.getMessage());
         }
-        return null;
+        String filename = new SimpleDateFormat("yyyyMMdd")
+                .format(new Date()) + "/"
+                + UUID.randomUUID() + "-"
+                + file.getOriginalFilename();
+
+        minioClient.putObject(PutObjectArgs.builder()
+                .bucket(properties.getBucketName())
+                .stream(file.getInputStream(), file.getSize(), -1)
+                .object(filename)
+                .contentType(file.getContentType())
+                .build());
+//            String url = properties.getEndpoint() + "/" + properties.getBucketName() + "/" + filename;
+        return String.join("/", properties.getEndpoint(), properties.getBucketName(), filename);
     }
 
     private String createBucketPolicyConfig(String bucketName) {
