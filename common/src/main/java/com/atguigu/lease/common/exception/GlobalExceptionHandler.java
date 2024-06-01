@@ -12,8 +12,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public Result error(Exception e){
-        log.error("出错了：{}",e.getMessage());
+    public Result error(Exception e) {
+        log.error("出错了：{}", e.getMessage());
         return Result.fail();
+    }
+
+    @ExceptionHandler(LeaseException.class)
+    @ResponseBody
+    public Result error(LeaseException e) {
+        log.error("出错了：{}", e.getMessage());
+        return Result.fail(e.getCode(), e.getMessage());
     }
 }
