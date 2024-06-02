@@ -16,6 +16,7 @@ public class LoginController {
     @GetMapping("login/getCode")
     @Operation(summary = "获取短信验证码")
     public Result getCode(@RequestParam String phone) {
+
         return Result.ok();
     }
 
