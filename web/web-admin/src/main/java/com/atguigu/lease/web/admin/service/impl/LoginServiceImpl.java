@@ -10,6 +10,7 @@ import com.atguigu.lease.web.admin.mapper.SystemUserMapper;
 import com.atguigu.lease.web.admin.service.LoginService;
 import com.atguigu.lease.web.admin.vo.login.CaptchaVo;
 import com.atguigu.lease.web.admin.vo.login.LoginVo;
+import com.atguigu.lease.web.admin.vo.system.user.SystemUserInfoVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wf.captcha.SpecCaptcha;
 import com.wf.captcha.base.Captcha;
@@ -51,7 +52,7 @@ public class LoginServiceImpl implements LoginService {
 
         //2.校验验证码
         String code = redisTemplate.opsForValue().get(loginVo.getCaptchaKey());
-        if (code==null){
+        if (code == null) {
             throw new LeaseException(ResultCodeEnum.ADMIN_CAPTCHA_CODE_EXPIRED);
         }
         if (!code.equals(loginVo.getCaptchaCode().toLowerCase())) {
@@ -80,5 +81,14 @@ public class LoginServiceImpl implements LoginService {
 
         //6.创建并返回TOKEN
         return JwtUtil.createToken(systemUser.getId(), systemUser.getUsername());
+    }
+
+    @Override
+    public SystemUserInfoVo getLoginUserInfo(Long userId) {
+        SystemUser user = systemUserMapper.selectById(userId);
+        SystemUserInfoVo userInfoVo = new SystemUserInfoVo();
+        userInfoVo.setName(user.getName());
+        userInfoVo.setAvatarUrl(user.getAvatarUrl());
+        return userInfoVo;
     }
 }

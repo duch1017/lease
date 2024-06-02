@@ -24,26 +24,25 @@ public class JwtUtil {
         return token;
     }
 
-    public static Claims parseToken(String token){
+    public static Claims parseToken(String token) {
 
-        if (token==null){
+        if (token == null) {
             throw new LeaseException(ResultCodeEnum.ADMIN_LOGIN_AUTH);
         }
 
-        try{
+        try {
             JwtParser jwtParser = Jwts.parser().setSigningKey(tokenSignKey).build();
-            return jwtParser.parseClaimsJws(token).getBody();
-        }catch (ExpiredJwtException e){
+            Jws<Claims> claimsJws = jwtParser.parseClaimsJws(token);
+            return claimsJws.getBody();
+        } catch (ExpiredJwtException e) {
             throw new LeaseException(ResultCodeEnum.TOKEN_EXPIRED);
-        }catch (JwtException e){
+        } catch (JwtException e) {
             throw new LeaseException(ResultCodeEnum.TOKEN_INVALID);
         }
     }
 
     public static void main(String[] args) {
-        String zhangsan = createToken(1L, "zhangsan");
+        String zhangsan = createToken(2L, "user");
         System.out.println(zhangsan);
-        Claims claims = parseToken("zhangsan");
-        System.out.println(claims.toString());
     }
 }
