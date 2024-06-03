@@ -1,7 +1,10 @@
 package com.atguigu.lease.web.app.controller.room;
 
 
+import com.atguigu.lease.common.login.LoginUserHolder;
 import com.atguigu.lease.common.result.Result;
+import com.atguigu.lease.web.app.mapper.BrowsingHistoryMapper;
+import com.atguigu.lease.web.app.service.BrowsingHistoryService;
 import com.atguigu.lease.web.app.service.RoomInfoService;
 import com.atguigu.lease.web.app.vo.room.RoomDetailVo;
 import com.atguigu.lease.web.app.vo.room.RoomItemVo;
@@ -24,6 +27,10 @@ public class RoomController {
     @Autowired
     private RoomInfoService roomInfoService;
 
+    @Autowired
+    private BrowsingHistoryService browsingHistoryService;
+
+
     @Operation(summary = "分页查询房间列表")
     @GetMapping("pageItem")
     public Result<IPage<RoomItemVo>> pageItem(@RequestParam long current, @RequestParam long size, RoomQueryVo queryVo) {
@@ -36,6 +43,7 @@ public class RoomController {
     @GetMapping("getDetailById")
     public Result<RoomDetailVo> getDetailById(@RequestParam Long id) {
         RoomDetailVo roomInfo = roomInfoService.getDetailById(id);
+        browsingHistoryService.saveHistory(LoginUserHolder.getLoginUser().getUserId(), id);
         return Result.ok(roomInfo);
     }
 
@@ -46,4 +54,5 @@ public class RoomController {
         IPage<RoomItemVo> list = roomInfoService.pageItemByApartmentId(page, id);
         return Result.ok(list);
     }
+
 }
