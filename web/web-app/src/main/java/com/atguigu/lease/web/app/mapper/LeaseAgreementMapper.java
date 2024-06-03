@@ -13,6 +13,7 @@ import java.util.List;
 * @Entity com.atguigu.lease.model.entity.LeaseAgreement
 */
 public interface LeaseAgreementMapper extends BaseMapper<LeaseAgreement> {
+    List<AgreementItemVo> listItemByPhone(String phone);
 
 }
 
