@@ -42,7 +42,7 @@ public class JwtUtil {
     }
 
     public static void main(String[] args) {
-        String zhangsan = createToken(2L, "user");
+        String zhangsan = createToken(8L, "user");
         System.out.println(zhangsan);
     }
 }

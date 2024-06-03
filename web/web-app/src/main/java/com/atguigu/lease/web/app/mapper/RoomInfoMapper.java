@@ -1,5 +1,6 @@
 package com.atguigu.lease.web.app.mapper;
 
+import com.atguigu.lease.model.entity.ApartmentInfo;
 import com.atguigu.lease.model.entity.RoomInfo;
 import com.atguigu.lease.web.app.vo.room.RoomItemVo;
 import com.atguigu.lease.web.app.vo.room.RoomQueryVo;
@@ -17,4 +18,9 @@ import java.math.BigDecimal;
 */
 public interface RoomInfoMapper extends BaseMapper<RoomInfo> {
 
+    IPage<RoomItemVo> pageRoomItemByQuery(Page<RoomItemVo> page, RoomQueryVo queryVo);
+
+    BigDecimal selectMinRentByApartmentId(ApartmentInfo apartmentInfo);
+
+    IPage<RoomItemVo> pageItemByApartmentId(IPage<RoomItemVo> page, Long id);
 }
