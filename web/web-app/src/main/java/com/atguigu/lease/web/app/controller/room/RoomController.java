@@ -43,7 +43,7 @@ public class RoomController {
     @GetMapping("getDetailById")
     public Result<RoomDetailVo> getDetailById(@RequestParam Long id) {
         RoomDetailVo roomInfo = roomInfoService.getDetailById(id);
-        browsingHistoryService.saveHistory(LoginUserHolder.getLoginUser().getUserId(), id);
+//        browsingHistoryService.saveHistory(LoginUserHolder.getLoginUser().getUserId(), id);
         return Result.ok(roomInfo);
     }
 

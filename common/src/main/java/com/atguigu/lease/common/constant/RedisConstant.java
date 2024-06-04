@@ -5,6 +5,7 @@ public class RedisConstant {
     public static final Integer ADMIN_LOGIN_CAPTCHA_TTL_SEC = 10;
     public static final String APP_LOGIN_PREFIX = "app:login:";
     public static final Integer APP_LOGIN_CODE_RESEND_TIME_SEC = 60;
-    public static final Integer APP_LOGIN_CODE_TTL_SEC = 10;
+    public static final Integer APP_LOGIN_CODE_TTL_SEC = 1;
     public static final String APP_ROOM_PREFIX = "app:room:";
+    public static final Integer APP_ROOM_DATA_TTL_SEC = 10;
 }

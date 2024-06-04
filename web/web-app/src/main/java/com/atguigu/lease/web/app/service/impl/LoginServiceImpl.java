@@ -83,6 +83,8 @@ public class LoginServiceImpl implements LoginService {
         if (!code.equals(loginVo.getCode())) {
             throw new LeaseException(ResultCodeEnum.APP_LOGIN_CODE_ERROR);
         }
+        //验证码校验成功后删除缓存中的数据
+        redisTemplate.delete(key);
 
         //3.判断用户是否存在,不存在则注册（创建用户）
         LambdaQueryWrapper<UserInfo> queryWrapper = new LambdaQueryWrapper<>();
